@@ -2,11 +2,13 @@
 An example of connecting a Django Channels application to Vue.js
 
 
+## Setup
+
+    pip install -r channels-app/requirements.txt
+
 ## Running Django Channels
 
-    cd project1
-    python3 project1/manage.py runserver --nostatic
-
+    python3 channels-app/manage.py runserver
 
 ## Running UI
 
