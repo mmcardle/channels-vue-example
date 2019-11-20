@@ -42,39 +42,38 @@ const make2dArray = (start, end) => {
 
 export default {
   name: 'HelloWorld',
-  props: {},
   components: {
     square: Square
   },
   created: function () {
-    this.$connect()
-    this.$options.sockets.onopen = () => {
-      this.send_message()
-    }
-    this.$options.sockets.onmessage = function (message) {
-      const data = JSON.parse(message.data)
-      this.websocketitems[data.x][data.y] = data.color
-      if (this.websocket_count < COUNT) {
-        this.send_message()
-        this.websocket_count += 1
-      }
-    }
-
-    this.fetch_http()
-
+    this.http()
+    this.websocket()
   },
   methods: {
-    send_message: function () {
-      this.$socket.send(JSON.stringify({max: NUM_COLS - 1}))
+    websocket: function () {
+      this.$connect()
+      this.$options.sockets.onopen = () => {
+        this.$socket.send(JSON.stringify({max: NUM_COLS - 1}))
+      }
+      this.$options.sockets.onmessage = function (message) {
+        message.data.text().then(t => {
+          const data = JSON.parse(t)
+          this.websocketitems[data.x][data.y] = data.color
+          if (this.websocket_count < COUNT) {
+            this.$socket.send(JSON.stringify({max: NUM_COLS - 1}))
+            this.websocket_count += 1
+          }
+        })
+      }
     },
-    fetch_http: function () {
+    http: function () {
       const that = this
       const max = NUM_COLS - 1
       fetch('api/?max=' + max).then(function (response) {
          response.json().then(function (data) {
            that.httpitems[data.x][data.y] = data.color
            if (that.http_count < COUNT) {
-             that.fetch_http()
+             that.http()
              that.http_count += 1
            }
          })

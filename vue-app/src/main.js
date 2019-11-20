@@ -5,7 +5,7 @@ import VueNativeSock from 'vue-native-websocket'
 Vue.config.productionTip = false
 
 var wsprotocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://'
-var ws = wsprotocol + window.location.hostname + ':' + window.location.port + '/ws/color/'
+var ws = wsprotocol + window.location.hostname + ':' + window.location.port + '/ws/acolor/'
 
 Vue.use(VueNativeSock, ws, {
   connectManually: true,
